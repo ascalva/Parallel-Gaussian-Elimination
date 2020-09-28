@@ -2,7 +2,7 @@ CSCI-654: Project 1
 
 Alberto Serrano-Calva (axs4986)
 
-Sequential program:
+Sequential Program:
 
     compile:
         gcc gaussian_elimination_sequential.c
@@ -11,7 +11,7 @@ Sequential program:
         ./a.out n
             where n is number of dimensions
 
-Parallel program:
+Parallel Program:
 
     compile:
         gcc gaussian_elimination_parallel.c -lpthread -lm
@@ -26,6 +26,8 @@ Additional Materials:
     An additional script, written using Python, is included, which is used to plot
     graph seen in the project report. The program will display the graph during execution
     and save a copy as a PNG file.
+    This includes the file plot.py (script) and an additional CSV file containing the
+    data for multiple runs at different values of N and P.
 
     requirements:
         matplotlib, pandas, seaborn
