@@ -6,13 +6,13 @@
 
 #define MAX_THREAD 20
 
-#define NDIM 12
+#define NDIM 20
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 
 double          a[NDIM][NDIM];
-double          b[NDIM];
-double          x[NDIM];
+//double          b[NDIM];
+//double          x[NDIM];
 
 typedef struct
 {
@@ -22,7 +22,7 @@ typedef struct
     int         u_indx;
     int         k;
 	double	    (*a)[][NDIM], /* *(*a)[], */
-                (*b)[]; 
+                *b; 
 } threadData;
 
 
@@ -44,8 +44,8 @@ void initialize_inputs(
         for (row = 0; row < NDIM; row++) {
             A[row][col] = a[row][col] = a_og[row][col] = (double)rand() / 32768.0;
         }
-        B[col] = b[col] = b_og[col] = (double)rand() / 32768.0;
-        X[col] = x[col] = 0.0;
+        B[col] = b_og[col] = (double)rand() / 32768.0;
+        X[col] = 0.0;
     }
 }
 
@@ -112,7 +112,9 @@ void comp_ge(int N, int row, int row_lim, int k, double (*A)[N], double *B)
 void * worker(void *arg)
 {
 	threadData           *p = (threadData *) arg;
-    comp_ge(p->dim, p->l_indx, p->u_indx, p->k, *(p->a), *(p->b));
+    comp_ge(p->dim, p->l_indx, p->u_indx, p->k, *(p->a), (p->b));
+
+    return 0;
 }
 
 int main(int argc, char *argv[])
@@ -127,12 +129,12 @@ int main(int argc, char *argv[])
 
 	// Generate matrix A and column vector B such that Ax = B, for some column
     // vector x.
-    double (*A)[]    = malloc(sizeof(double[NDIM][NDIM]));
-    double  *B       = malloc(sizeof(double[NDIM]));
-    double  *X       = malloc(sizeof(double[NDIM]));
+    double (*A)[NDIM]    = malloc(sizeof(double[NDIM][NDIM]));
+    double  *B           = malloc(sizeof(double[NDIM]));
+    double  *X           = malloc(sizeof(double[NDIM]));
 
-    double (*a_og)[] = malloc(sizeof(double[NDIM][NDIM]));
-    double  *b_og    = malloc(sizeof(double[NDIM]));
+    double (*a_og)[NDIM] = malloc(sizeof(double[NDIM][NDIM]));
+    double  *b_og        = malloc(sizeof(double[NDIM]));
 
 	initialize_inputs(NDIM, A, B, X, a_og, b_og);
 
@@ -149,8 +151,8 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	threads = (pthread_t *) malloc(n * sizeof(pthread_t));
-	arg     = (threadData *)malloc(sizeof(threadData)*n);
+	threads = (pthread_t  *) malloc(n * sizeof(pthread_t ));
+	arg     = (threadData *) malloc(n * sizeof(threadData));
 	
 	/* Start up thread */
 
@@ -168,7 +170,7 @@ int main(int argc, char *argv[])
             a[k][j] = a[k][j] / a[k][k];
         }
 
-        b[k] = b[k] / a[k][k];
+        B[k] = B[k] / a[k][k];
 
         // Compute number of elements (rows) per processor.
         n_elements = ceil((double)(NDIM - k - 1) / (double)n);
@@ -189,7 +191,7 @@ int main(int argc, char *argv[])
                 arg[p].u_indx    = end_pos;
                 arg[p].k         = k;
                 arg[p].a         = &a;
-                arg[p].b         = &b;
+                arg[p].b         = B;
 
                 pthread_create(&threads[p], NULL, worker, (void *)(arg+p));
             }
@@ -216,7 +218,7 @@ int main(int argc, char *argv[])
                 arg[p].u_indx    = start_pos + 1;
                 arg[p].k         = k;
                 arg[p].a         = &a;
-                arg[p].b         = &b;
+                arg[p].b         = B;
                 
                 pthread_create(&threads[p], NULL, worker, (void *)(arg+p));
             }
@@ -230,10 +232,10 @@ int main(int argc, char *argv[])
     }
 
     // Compute back-substitution.
-    back_sub(NDIM,a,b,x);
+    back_sub(NDIM,a,B,X);
     
     // Check if correct
-    check_comp(NDIM, a_og, x, b_og);
+    check_comp(NDIM, a_og, X, b_og);
     
 	free(arg);
 }
