@@ -20,7 +20,7 @@ def plot_time_vs_N(df):
     axes.set_ylabel("Total Execution Time (s)", fontsize = 12)
 
     for attr in df.columns[1:] :
-        axes.plot(df["N"], df[attr], label = f"P = {int(attr[1:])}")
+        axes.plot(df["N"], df[attr], marker='o', label = f"P = {int(attr[1:])}", alpha = 0.8)
 
     plt.legend()
     plt.savefig("time_v_N.png", dpi=100)
