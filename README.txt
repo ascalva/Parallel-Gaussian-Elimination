@@ -1,4 +1,4 @@
-CSCI-654: Project 1
+Gaussian Elimination Using C and MPI
 
 Alberto Serrano-Calva (axs4986)
 
