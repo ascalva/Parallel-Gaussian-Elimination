@@ -1,6 +1,6 @@
-Gaussian Elimination Using C and MPI
+## Gaussian Elimination Using C and MPI ##
 
-Sequential Program:
+### Sequential Program: ###
 
     compile:
         gcc gaussian_elimination_sequential.c
@@ -9,7 +9,7 @@ Sequential Program:
         ./a.out n
             where n is number of dimensions
 
-Parallel Program:
+### Parallel Program: ###
 
     compile:
         gcc gaussian_elimination_parallel.c -lpthread -lm
@@ -19,7 +19,7 @@ Parallel Program:
             where d is the number of dimensions and n is the number of threads
 
 
-Additional Materials:
+### Additional Materials: ###
 
     An additional script, written using Python, is included, which is used to plot
     graph seen in the project report. The program will display the graph during execution
@@ -36,3 +36,4 @@ Additional Materials:
 
 ### Results ###
 <img src="graphs/time_v_N.png" width=500>
+![Alt text](graphs/time_v_N.png?raw=true "Sequential vs. Parallel Program")
