@@ -1,7 +1,5 @@
 Gaussian Elimination Using C and MPI
 
-Alberto Serrano-Calva (axs4986)
-
 Sequential Program:
 
     compile:
@@ -35,3 +33,6 @@ Additional Materials:
     run:
         python3 plot.py
 
+
+### Results ###
+<img src="graphs/time_v_N.png" width=500>
