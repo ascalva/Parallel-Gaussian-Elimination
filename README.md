@@ -35,5 +35,4 @@
 
 
 ### Results ###
-<img src="graphs/time_v_N.png" width=500>
-![Alt text](graphs/time_v_N.png?raw=true "Sequential vs. Parallel Program")
+<img src="graphs/time_v_N.png" width=600>
